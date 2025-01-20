@@ -19,6 +19,7 @@ public class Main {
         //создаем ридер команд пользователя
         BufferedReader vvodstroki = new BufferedReader(new InputStreamReader(System.in));
         String start = vvodstroki.readLine();
+
         if(start.equalsIgnoreCase("exit")) {
             System.exit(0);
         }
@@ -132,6 +133,7 @@ public class Main {
                 int number = Integer.parseInt(vvodstroki.readLine());
                 //создаем кабиент
                 kabinet.createRoom(number);
+
                 //команда на добовление
             } else if (command.equals("add")) {
                 //если пусто то добавь пупилов

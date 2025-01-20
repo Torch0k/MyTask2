@@ -1,43 +1,54 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 class Kabinet {
-    private List<Room> rooms;
+    public List<Integer> roomNumbers; // Номера кабинетов
+    public List<List<Pupil>> roomStudents; // Список учеников для каждого кабинета
 
     public Kabinet() {
-        this.rooms = new ArrayList<>();
+        roomNumbers = new ArrayList<>();
+        roomStudents = new ArrayList<>();
     }
-        // cоздаем кабинет
+
+    // делаем кабинет
     public void createRoom(int number) {
-        rooms.add(new Room(number));
+        if (roomNumbers.contains(number)) {
+            System.out.println("Кабинет №" + number + " уже существует.");
+            return;
+        }
+        roomNumbers.add(number);
+        roomStudents.add(new ArrayList<>()); // добавляем пустой список учеников для нового кабинета
         System.out.println("Кабинет №" + number + " создан.");
     }
 
+    // добавка ученика в кабинет
     public void addStudentToRoom(Pupil pupil, int roomNumber) {
-        Room room = findRoomByNumber(roomNumber);
-        if (room != null) {
-            room.addStudent(pupil);
-            System.out.println("Ученик добавлен в кабинет №" + roomNumber);
-        } else {
-            System.out.println("Кабинет не найден.");
+        int index = roomNumbers.indexOf(roomNumber);
+        if (index == -1) {
+            System.out.println("Кабинет №" + roomNumber + " не найден.");
+            return;
         }
+        roomStudents.get(index).add(pupil); // добавляем ученика в список для кабинета
+        System.out.println("Ученик добавлен в кабинет №" + roomNumber);
     }
 
+    // список учеников и кабинетов
     public void listRooms() {
-        if (rooms.isEmpty()) {
+        if (roomNumbers.isEmpty()) {
             System.out.println("Нет созданных кабинетов.");
-        } else {
-            for (Room room : rooms) {
-                System.out.println(room.getInfo());
+            return;
+        }
+        for (int i = 0; i < roomNumbers.size(); i++) {
+            System.out.println("Кабинет №" + roomNumbers.get(i) + ":");
+            List<Pupil> students = roomStudents.get(i);
+            if (students.isEmpty()) {
+                System.out.println("  Пусто");
+            } else {
+                for (Pupil pupil : students) {
+                    System.out.println("  " + pupil.getInfo());
+                }
             }
         }
     }
-    // нахождения кабинетов (спижжено )
-    private Room findRoomByNumber(int number) {
-        return rooms.stream()
-                .filter(room -> room.getNumber() == number)
-                .findFirst()
-                .orElse(null);
-    }
 }
-
