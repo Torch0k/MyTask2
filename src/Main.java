@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    private static Kabinet kabinet = new Kabinet();
+
 
     public static void main(String[] args) throws IOException {
 
@@ -31,15 +31,15 @@ public class Main {
             //выыодим список учеников
             System.out.println("\nСписок учеников:");
             // циклом выводим всех учеников
-            for (Pupil pupil : Pupil.getStudents()) {
+            for (Pupil pupil : Pupil.students) {
                 System.out.println(pupil.getInfo());
 
             }
              typo();
              // вывод телочек
         } if(start.startsWith("allG")){
-            for (Pupil pupil : Pupil.getStudents()) {
-                if (pupil.getGender() != true) {
+            for (Pupil pupil : Pupil.students) {
+                if (pupil.isMale != true) {
                     System.out.println(pupil.getInfo());
                 }
                 typo();
@@ -47,8 +47,8 @@ public class Main {
         }
          //вывод мальчиков
         if(start.startsWith("allB")){
-            for (Pupil pupil : Pupil.getStudents()) {
-                if (pupil.getGender() == true) {
+            for (Pupil pupil : Pupil.students) {
+                if (pupil.isMale) {
                     System.out.println(pupil.getInfo());
 
                 }
@@ -57,7 +57,8 @@ public class Main {
         }
         if (start.startsWith("Kabinet")){
 
-            kabinetManager(kabinet);
+            kabinetAdder();
+           // вызываем екабинет манагер раньшше.
 
         }
          else {
@@ -73,17 +74,14 @@ public class Main {
         //ввод сруки имени
         String name = vvodstroki.readLine();
 
-        for (Pupil pupil : Pupil.getStudents()) {
-            if (pupil.getName().equals(name)){
+        for (Pupil pupil : Pupil.students) {
+            if (pupil.name.equals(name)){
                 System.out.println("занято нахуй");
                 System.out.println("Exit выход . add - добавка. list - все ученики allB-все мальчики. allG-все девочки");
                 typo();
 
             }
         }
-
-
-
 
         System.out.println("Пол М или Ж?");
 
@@ -120,55 +118,41 @@ public class Main {
         System.out.println("Ученик добавлен: " + name + ", возраст: " + age + "пол - лава" +pregender);
     }
 
-    public static void kabinetManager(Kabinet kabinet) throws IOException {
+    public static void kabinetAdder() throws IOException {
         BufferedReader vvodstroki = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Команды: create - создать кабинет, add - добавить ученика, list - список кабинетов, back - назад.");
+        System.out.println("Создать кабинет. create");
+        String name = vvodstroki.readLine();
 
-        while (true) {
-            String command = vvodstroki.readLine().toLowerCase();
-            // создаем кабинеьт
-            if (command.equals("create")) {
-                System.out.print("Введите номер кабинета: ");
-                //прием номера кабинета от юзера
-                int number = Integer.parseInt(vvodstroki.readLine());
-                //создаем кабиент
-                kabinet.createRoom(number);
-
-                //команда на добовление
-            } else if (command.equals("add")) {
-                //если пусто то добавь пупилов
-                if (Pupil.getStudents().isEmpty()) {
-                    System.out.println("Нет учеников. Сначала добавьте учеников.");
-                    continue;
-                }
-                // пишем всех учеников чтобы выбрать кого добавить
-                System.out.println("\nСписок учеников:");
-                for (int i = 0; i < Pupil.getStudents().size(); i++) {
-                    System.out.println(i + ": " + Pupil.getStudents().get(i).getInfo());
-                }
-                // пишем всех учеников и кабинеты чтобы добвить
-                System.out.print("Введите индекс ученика: ");
-                int studentIndex = Integer.parseInt(vvodstroki.readLine());
-                Pupil selectedPupil = Pupil.getStudents().get(studentIndex);
-
-                System.out.println("Список кабинетов:");
-                kabinet.listRooms();
-
-                System.out.print("Введите номер кабинета: ");
-                int kabinetNumber = Integer.parseInt(vvodstroki.readLine());
-                // добавляем ученика в кабинет.
-                kabinet.addStudentToRoom(selectedPupil, kabinetNumber);
-                // вызываем метод из kabinet чтобы показать список кабинетов
-            } else if (command.equals("list")) {
-                kabinet.listRooms();
-            } else if (command.equals("back")) {
-                System.out.println("Exit выход . add - добавка. list - все ученики allB-все мальчики. allG-все девочки");
-               typo(); // Возвращаемся в основное меню
-                
-            } else {
-                System.out.println("Неизвестная команда. Введите: create, add, list, back.");
-            }
+        if(name.equals("create")){
+            System.out.println("ведите номер кабинета");
+            int num = Integer.parseInt(vvodstroki.readLine());
+            Kabinet.kabinets.add(new Kabinet(num));
         }
+            else if (name.equals("add")){
+            System.out.println("введите номер ученика");
+            for (int i = 0; i < Pupil.students.size(); i++) {
+                System.out.println(i+": " + Pupil.students.get(i).getInfo());
+            }
+                int num = Integer.parseInt(vvodstroki.readLine());
+                Pupil student = Pupil.students.get(num);
+            System.out.println("все кабинеты");
+            for (int i = 0; i < Kabinet.kabinets.size(); i++) {
+                System.out.println(i+";"+Kabinet.kabinets.get(i).KabinetID);
+            }
+            System.out.println("выбери кабинет");
+            int num2 = Integer.parseInt(vvodstroki.readLine());
+            Kabinet.kabinets.get(num2).pupils.add(student);
+        }
+            else if (name.equals("list")){
+                for ( Kabinet kabinet : Kabinet.kabinets) {
+                    System.out.println("каб"+ kabinet.KabinetID);
+                    for (Pupil pupil : Pupil.students) {
+                        System.out.println(pupil.getInfo());
+                    }
+                }
+        }
+        kabinetAdder();
+
     }
 }
 

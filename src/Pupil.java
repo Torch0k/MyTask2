@@ -2,46 +2,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Pupil {
-    private String name;
-    private int age;
-    private static List<Pupil> students = new ArrayList<>();
-    private boolean gender;
+    public String name;
+    public int age;
+    public static List<Pupil> students = new ArrayList<>();
+    public boolean isMale;    // убрать private отовсюду и
 
-    public Pupil(String name, int age,boolean gender) {
+    public Pupil(String name, int age,boolean isMale) {
         this.name = name;
         this.age = age;
-        this.gender = gender;
+        this.isMale = isMale;
     }
 
     public static void addStudent(String name, int age,boolean gender) {students.add(new Pupil(name, age,gender));
     }
 
-    public static List<Pupil> getStudents() {
-        return students;
-    }
+    public String isMaleToString() {
+        if (isMale) {
+            return "НАщ! ПАцан";
 
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public boolean getGender() {return gender;}
-
-    public boolean setGender(boolean gender) {
-        return gender;
-    }
-    public String knowGender(){
-        if (gender) { return "НАщ! ПАцан"; }
-
-        if(gender != true) { return "Фуу девка тупая"; }
-        else return "ошибка";
-    }
-
+        } else return "Фуу девка тупая";
+        }
 
     public String getInfo() {
-        return "Имя " + name + " Возраст " + age + " "+ knowGender() +" "+ "пол";
+        return "Имя " + name + " Возраст " + age + " "+ isMaleToString() +" "+ "пол";
     }
 }
